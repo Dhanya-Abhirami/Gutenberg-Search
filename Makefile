@@ -1,6 +1,6 @@
 build:
 	docker-compose build
 run:
-	docker-compose up
+	docker-compose up 
 stop:
-	docker-compose down
+	docker-compose down --remove-orphans

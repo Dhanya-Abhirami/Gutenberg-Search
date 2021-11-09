@@ -7,3 +7,10 @@ https://www.elastic.co/blog/the-go-client-for-elasticsearch-working-with-data
 https://developer.okta.com/blog/2021/04/23/elasticsearch-go-developers-guide
 https://outcrawl.com/go-elastic-search-service
 https://pkg.go.dev/github.com/elastic/go-elasticsearch/v8#section-readme
+
+## Setup
+make build
+make run
+make stop
+
+localhost:9200
