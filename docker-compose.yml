@@ -9,7 +9,7 @@ services:
     environment:
       ES_HOST : elasticsearch
     volumes:
-      - ./books:/usr/src/app/books
+      - ./books:/server/books
     depends_on:
       - "elasticsearch"
     restart: 
@@ -28,6 +28,7 @@ services:
       - esdata:/usr/share/elasticsearch/data
     environment:
       - discovery.type=single-node
+      - logger.level=WARN
     ports: # Expose Elasticsearch ports
       - "9300:9300"
       - "9200:9200"
