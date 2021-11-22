@@ -18,7 +18,7 @@ services:
   #   container_name: gs-client
   #   image: nginx
   #   ports: 
-  #     - 4200:80
+  #     - 4200:4200
   #   volumes:
   #     - ./client:/usr/share/nginx/html
   elasticsearch: # Elasticsearch Instance
