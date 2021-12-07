@@ -41,6 +41,7 @@ func parseBookFile (filePath string) (string, string, []string) {
         log.Fatal(err)
     }
 	book := string(b)
+    
 	title := regexp.MustCompile(`(?m)(^Title:\s)(.+)(\s)$`).FindStringSubmatch(book)[2]
 	authorMatch := regexp.MustCompile(`(?m)(^Author:\s)(.+)(\s)$`).FindStringSubmatch(book)
 	var author string
@@ -52,19 +53,11 @@ func parseBookFile (filePath string) (string, string, []string) {
 	}
 	
 	log.Printf("Reading Book - %s By - %s",title,author)
-    startOfBookMatch := regexp.MustCompile(`(?m)(^\*{3}\s*START OF (THIS|THE) PROJECT GUTENBERG EBOOK.+\*{3})$`)
-    endOfBookMatch := regexp.MustCompile(`(?m)(^\*{3}\s*END OF (THIS|THE) PROJECT GUTENBERG EBOOK.+\*{3})$`)
-    log.Println(len(startOfBookMatch.FindStringIndex(book)),len(endOfBookMatch.FindStringIndex(book)))
+    startOfBookMatch := regexp.MustCompile(`(?m)^\*{3}\s*START OF (THIS|THE) PROJECT GUTENBERG EBOOK.+\*{3}\s$`)
+    endOfBookMatch := regexp.MustCompile(`(?m)^\*{3}\s*END OF (THIS|THE) PROJECT GUTENBERG EBOOK.+\*{3}\s$`)
     if len(startOfBookMatch.FindStringIndex(book)) > 0 && len(endOfBookMatch.FindStringIndex(book)) > 0 {
         startOfBookIndex := startOfBookMatch.FindStringIndex(book)[0] + len(startOfBookMatch.FindString(book))
         endOfBookIndex := endOfBookMatch.FindStringIndex(book)[0]
-        
-        // paragraphs = 
-        //   .slice() // Remove Guttenberg header and footer
-        //   .split(/\n\s+\n/g) // Split each paragraph into it's own array entry
-        //   .map(line => line.replace(/\r\n/g, ' ').trim()) // Remove paragraph line breaks and whitespace
-        //   .map(line => line.replace(/_/g, '')) // Guttenberg uses "_" to signify italics.  We'll remove it, since it makes the raw text look messy.
-        //   .filter((line) => (line && line !== '')) // Remove empty lines
         book = book[startOfBookIndex:endOfBookIndex]
         paragraphBreakmatch := regexp.MustCompile(`\n\s+\n`)
         raw_paragraphs := paragraphBreakmatch.Split(book, -1) 

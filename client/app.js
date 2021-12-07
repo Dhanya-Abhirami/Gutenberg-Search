@@ -29,7 +29,7 @@ const vm = new Vue ({
       /** Call API to search for inputted term */
       async search () {
         const response = await axios.get(`${this.baseUrl}/search`, { params: { term: this.searchTerm, offset: this.searchOffset } })
-        this.numHits = response.data.hits.total
+        this.numHits = response.data.hits.total.value
         return response.data.hits.hits
       },
       /** Get next page of search results */
