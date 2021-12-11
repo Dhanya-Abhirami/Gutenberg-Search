@@ -22,9 +22,8 @@ var es *elasticsearch.Client
 type Document struct {
     Title string `json:"title"`
     Author string `json:"author"`
-    Paragraphs []string `json:"paragraphs"`
-    // Id int `json:"id"`
-    // Text string `json:"text"`
+    Text string `json:"text"`
+    Id int `json:"id"`
 }
 
 func resetIndex(){
@@ -95,37 +94,41 @@ func loadBooks(){
         log.Fatal(err)
     }
     var countSuccessful uint64
-    for i, file := range files {
+    for _, file := range files {
         match, _ := regexp.MatchString("[0-9A-Za-z-]+(\\.txt)", file.Name())
         if(match){   
             title, author, paragraphs := parseBookFile(bookPath+file.Name())
-            d := &Document{
-                Title: title,
-                Author: author,
-                Paragraphs: paragraphs,
+            for j, paragraph := range paragraphs {
+                d := &Document{
+                    Title: title,
+                    Author: author,
+                    Text: paragraph,
+                    Id:j,
+                }
+                data, err := json.Marshal(d)
+                if err != nil {
+                    log.Fatalf("Cannot encode article %d: %s", d.Title, err)
+                }
+                err = bi.Add(context.Background(), esutil.BulkIndexerItem{
+                            Action:     "index",
+                            DocumentID: strconv.Itoa(j),
+                            Body: bytes.NewReader(data),
+                            OnSuccess: func(ctx context.Context, item esutil.BulkIndexerItem, res esutil.BulkIndexerResponseItem) {
+                                atomic.AddUint64(&countSuccessful, 1)
+                              },
+                            OnFailure: func(ctx context.Context, item esutil.BulkIndexerItem, res esutil.BulkIndexerResponseItem, err error) {
+                            if err != nil {
+                                log.Printf("ERROR: %s", err)
+                            } else {
+                                log.Printf("ERROR: %s: %s", res.Error.Type, res.Error.Reason)
+                            }
+                            },
+                        })
+                if err != nil {
+                    log.Fatalf("Unexpected error: %s", err)
+                }
             }
-            data, err := json.Marshal(d)
-            if err != nil {
-                log.Fatalf("Cannot encode article %d: %s", d.Title, err)
-            }
-            err = bi.Add(context.Background(), esutil.BulkIndexerItem{
-                        Action:     "index",
-                        DocumentID: strconv.Itoa(i),
-                        Body: bytes.NewReader(data),
-                        OnSuccess: func(ctx context.Context, item esutil.BulkIndexerItem, res esutil.BulkIndexerResponseItem) {
-                            atomic.AddUint64(&countSuccessful, 1)
-                          },
-                        OnFailure: func(ctx context.Context, item esutil.BulkIndexerItem, res esutil.BulkIndexerResponseItem, err error) {
-                        if err != nil {
-                            log.Printf("ERROR: %s", err)
-                        } else {
-                            log.Printf("ERROR: %s: %s", res.Error.Type, res.Error.Reason)
-                        }
-                        },
-                    })
-            if err != nil {
-                log.Fatalf("Unexpected error: %s", err)
-            }
+            
         }
     }
 

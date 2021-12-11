@@ -49,12 +49,12 @@ const vm = new Vue ({
         document.documentElement.scrollTop = 0
       },
       /** Call the API to get current page of paragraphs */
-      async getParagraphs (bookTitle, offset) {
+      async getParagraphs (title, offset) {
         try {
           this.bookOffset = offset
           const start = this.bookOffset
           const end = this.bookOffset + 10
-          const response = await axios.get(`${this.baseUrl}/paragraphs`, { params: { bookTitle, start, end } })
+          const response = await axios.get(`${this.baseUrl}/paragraphs`, { params: { title, start, end } })
           return response.data.hits.hits
         } catch (err) {
           console.error(err)
