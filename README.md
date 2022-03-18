@@ -1,10 +1,4 @@
-https://github.com/triestpa/Guttenberg-Search/
-
-
-# Some useful links
-https://regex101.com/ \
-https://stackoverflow.com/questions/57639542/elasticsearch-container-returns-malformed-http-status-response \
-https://stackoverflow.com/questions/68802324/elasticsearch-in-go-err-the-client-noticed-that-the-server-is-not-elasticsearch \
+Full Text search application built using Elastic Search for searching books.
 
 
 ## Contributing
@@ -17,3 +11,8 @@ make stop
 ```
 
 localhost:8080
+
+# Credits
+* [triestpa/Guttenberg-Search](https://github.com/triestpa/Guttenberg-Search/)
+* [elastic/go-elasticsearch/v8](https://pkg.go.dev/github.com/elastic/go-elasticsearch/v8)
+* [Regex101](https://regex101.com/)
