@@ -1,5 +1,7 @@
 Full Text search application built using Elastic Search for searching books.
 
+# Technologies
+Technologies used: Go, Gin framework, ElasticSearch
 
 ## Contributing
 Fork and clone the repository.
