@@ -14,7 +14,7 @@ make stop
 
 localhost:8080
 
-# Credits
+# Acknowledgements
 * [triestpa/Guttenberg-Search](https://github.com/triestpa/Guttenberg-Search/)
 * [elastic/go-elasticsearch/v8](https://pkg.go.dev/github.com/elastic/go-elasticsearch/v8)
 * [Regex101](https://regex101.com/)
